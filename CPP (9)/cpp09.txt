@@ -1,0 +1,78 @@
+#1. 배열 첨자 연산자 []의 다중정의
+SafeIntArray1 클래스
+[] 연산자
+SafeIntArray1의 멤버함수 element()를 [] 연산자로 구현
+
+#2. 문자열 클래스
+char형 배열이나 동적 할당 메모리, 문자열 상수에 저장
+문자열의 끝을 알리기 위해 널 문자('\0')를 사용함
+char str1[40] = "12345678";  -> \0까지 공간 9개 차지
+char str2[] = "12345678 "; -> \0까지 공간 10개 차지
+char *str3 = "12345678"; -> \0까지 공간 9개 차지
+
+size_t strlen(const char* str);
+char* strcpy(char* strDest, const char* strSource);
+char* strcat(char* strDest, const char* strSource); 
+
+#3. 자료형의 변환
+(1) 값을 제공하는 송신 측 클래스에서 정의하는 방법
+MyString::operator char*() const{
+  char *pt = new char[length()+1];
+  strcpy(pt, buf);
+  return pt;
+}
+(2) 값을 제공받는 수신 측 클래스에서 정의하는 방법
+송신측 클래스의 객체를 인수로 갖는 1인수 생성자를 정의함 
+MyString(const char* str);
+문제점 : 송신측 클래스의 private 멤버를 액세스해야 변환이 가능한 경우
+-> 변환 대상 송신 측 클래스의 private 멤버를 액세스 할 수 있는 멤버함수가 송신 측 클래스에 정의되어 있어야 함. 
+(EX1) 
+class Meter{
+  int m, cm;
+public:
+  int getM() const {return m;} //형변환을 위해 송신측에 액세스할 수 있는 멤버함수 
+  int getCM() const {return cm;} //형변환을 위해 송신측에 액세스할 수 있는 멤버함수 
+}
+
+class Feet{
+  int ft, in;
+public:
+  Feet(const Meter &m){
+    int cmeter = m.getM()*100 + m.getCM();
+    in = static_cast<int>(cmeter/2.54+0.5);
+    ft = in/12;
+    in %= 12;
+  }
+}
+
+(EX2) friend 사용
+class Meter{
+  int m, cm;
+public:
+  friend class Feet;
+}
+
+class Feet{
+  int ft, in;
+public:
+  Feet(const Meter &m){
+    int cmeter = m.m*100 + m.cm; //송신측의 private 변수 바로 사용가능
+    in = static_cast<int>(cmeter/2.54+0.5);
+    ft = in/12;
+    in %= 12;
+  }
+
+#4. 연산자 다중정의의 주의사항
+(1) 주요 연산자 다중 정의 대상
+- 클래스의 객체 간 대입 연산자
+- 수치형 객체의 산술 연산자 다중 정의
+- 두 객체를 비교하기 위한 관계 연산자의 다중 정의
+- 스트림 입력 및 출력을 위한 >>, << 연산자
+
+(2) 다중정의할 수 없는 연산자
+- 멤버 선택 연산자(.)
+- 멤버에 대한 포인터 연산자 (.*)
+- 유효범위 결정 연산자(::)
+- 조건 연산자(? ;)
+
+

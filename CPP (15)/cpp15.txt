@@ -1,0 +1,30 @@
+15강. 예외처리
+#1 예외의 유형
+(1) 예외(exception)
+- 프로그램 실행 도중에 비정상적인 상황이 발생한 것 (비정상적 데이터, 자원의 부족)
+- 프로그램이 요쳥하는 자원을 할당할 수 없는 경우 (매우 큰 용량을 요구하는 클래스)
+  HugeClass* p;
+  //메모리 할당이 이루어지지 않으면 new(nothrow)가 NULL을 반환함.
+  if((p = new(nothrow) HugeClass) == NULL){ 
+    cout << "ERROR!!";
+    exit(EXIT_FAILURE);
+  }
+
+#2 C++ 언어와 예외 처리 체계
+(1) 예외처리 구문
+  try 블록, catch 블록, throw 문장
+  try{
+    //예외 발생될 가능성이 있는 부분
+    ErrorCatchFunc();
+  }catch{
+    //예외 처리
+  }
+
+  void ErrorCatchFunc(){
+    if(ERROR) throw param;
+  }
+
+#3 예외 처리 클래스
+(1) 예외 처리 클래스의 활용
+- 클래스 설계 시 예외 처리 기능 포함시킴
+- 클래스 선언문 내에 예외처리 담당 클래스 선언하여 활용함.

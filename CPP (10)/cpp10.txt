@@ -1,0 +1,43 @@
+#1. 파생클래스의 선언
+DClassName : 파생 클래스 이름
+BClassName : 기초 클래스 이름
+class DClassName : visibilitySpec BClassName{
+visibilitySpec_1:
+  Data and Function
+visibilitySpec_2:
+  Data and Function
+}
+
+#2. 파생클래스의 생성자와 소멸자
+(1) 생성자 선언 형식
+DClassName(dArgList) : BClassName(bArgsList){}
+(2) 생성자와 소멸자의 실행 순서
+  가. 생성자 : 기초클래스 생성자 -> 파생 클래스 생성자
+    파생클래스는 기초클래스의 내용을 바탕으로 하고 있음.
+    객체의 기초클래스 해당 내용이 먼저 준비된 후 파생클래스에 선언된 내용을 초기화할 필요가 있음.
+  나. 소멸자 : 파생클래스 소멸자 -> 기초 클래스 소멸자
+    기초 클래스 속성이 제거되기 전에 이를 활용할 가능성이 있는 파생 클래스 객체를 제거해야 함. 
+
+#3. 액세스 제어
+(1) 가시성
+private   : 소속 클래스의 멤버함수
+            친구 클래스의 멤버함수 및 친구함수
+            (파생 클래스는 접근 불가!)
+protected : 소속 클래스의 멤버함수
+            친구 클래스의 멤버함수와 친구함수
+            파생클래스의 멤버함수
+            파생클래스의 친구클래스의 멤버함수와 친구함수
+public    : 전 범위
+(디폴트는 private)
+(2) 기초클래스로부터 상속받은 멤버의 가시성
+- 클래스 선언문의 가시성 상속 지시어에 따라 기초 클래스의 멤버가 파생 클래스에 상속되어 파생 클래스의 멤버로서 갖게 되는 가시성이 결정됨.
+- 가시성 상속 지시어에 지시된 것이 가시성의 상한이 되도록 제한됨.
+class D1 : private B{} 
+- B public -> D1 private
+- B protected -> D1 private
+class D2 : protected B{}
+- B public -> D2 protected
+- B protected -> D2 protected
+class D3 : public B{}
+- B public -> D3 public
+- B protected -> D3 protected
